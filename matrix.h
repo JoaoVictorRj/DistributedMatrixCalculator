@@ -2,7 +2,7 @@ template <typename T> class Matrix{
     public:
     template Matrix();   //matrix class constructor
 
-    //Matrix<T> operator[](int i) const;   //
+    Matrix<T> operator[](int i) const;   //
 
     void add(Matrix &other);   //sum other matrix to this matrix
 
