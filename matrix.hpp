@@ -25,13 +25,10 @@ public:
     	{
     		elements[i] = new T[height];
     	}
-
-    	std::cout << "Creating matrix" << std::endl;
     }
 
     ~Matrix()
     {
-    	std::cout << "deleting matrix" << std::endl;
     	if(elements != 0)
     	{
     		for(int i=0; i<width; i++)
@@ -40,6 +37,11 @@ public:
     		}
     		delete[] elements;
     	}
+    }
+
+    T* operator[](int i)
+    {
+    	return elements[i];
     }
 
     void add(Matrix &other);   //sum other matrix to this matrix

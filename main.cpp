@@ -1,7 +1,11 @@
 #include "matrix.hpp"
 
 int main(){
-    Matrix<int> newmatrix(10,10);
+    Matrix<int> mat(10,10);
+
+    mat[2][2] = 5;
+
+    std::cout << mat[2][2] << std::endl;
 
     return 0;
 }
