@@ -2,6 +2,7 @@
 #define __MATRIX__
 
 #include <iostream>
+#include <sstream>
 
 template <class T> 
 class Matrix
@@ -13,7 +14,7 @@ private:
 
 public:
 
-    Matrix(){}   //matrix class constructor
+    Matrix(){}
 
     Matrix(int w, int h)
     {
@@ -27,7 +28,68 @@ public:
     	}
     }
 
+    Matrix(int w, int h, T value)
+    {
+    	width = w;
+    	height = h;
+
+    	elements = new T*[width];
+    	for(int i=0; i<width; i++)
+    	{
+    		elements[i] = new T[height];
+    	}
+    	fill(value);
+    }
+
+    Matrix(Matrix<T> &other)
+    {
+    	width = other.getWidth();
+    	height = other.getHeight();
+
+		elements = new T*[width];
+		for(int i=0; i<width; i++)
+		{
+			elements[i] = new T[height];
+			for(int j=0; j<other.height; j++)
+			{
+				elements[i][j] = other[i][j];
+			}
+		}
+    }
+
     ~Matrix()
+    {
+    	clear();
+    }
+
+    int getWidth() const
+    {
+    	return width;
+    }
+
+    int getHeight() const
+    {
+    	return height;
+    }
+
+    T** getPointer() const
+    {
+    	return elements;
+    }
+
+    void fill(T element)
+    {
+    	//(to-do) multithread
+    	for(int i=0; i<width; i++)
+		{
+		for(int j=0; j<height; j++)
+		{
+			elements[i][j] = element;
+		}
+		}
+    }
+
+    void clear()
     {
     	if(elements != 0)
     	{
@@ -36,22 +98,108 @@ public:
     			delete[] elements[i];
     		}
     		delete[] elements;
+
+    		elements = 0;
+	    	width = 0;
+	    	height = 0;
     	}
     }
 
-    T* operator[](int i)
+    void add(Matrix<T> &other);
+    void sub(Matrix<T> &other);
+    void mul(Matrix<T> &other);
+    void copy(Matrix<T> &other);
+
+    void determinant();
+    void inverse();
+    void transpose();
+
+
+    T* operator[](int i) const
     {
     	return elements[i];
     }
 
-    void add(Matrix &other);   //sum other matrix to this matrix
+    Matrix<T>& operator=(const Matrix<T>& other) // copy assignment
+    {
+    	if(this != &other)
+    	{
+    		clear();
 
-    void sub(Matrix &other);   //subtracts other matrix to this matrix
+	    	width = other.getWidth();
+	    	height = other.getHeight();
 
-    void det();   //calculates the matrix's determinant
+	    	elements = new T*[width];
+			for(int i=0; i<width; i++)
+			{
+				elements[i] = new T[height];
+				for(int j=0; j<height; j++)
+				{
+					elements[i][j] = other[i][j];
+				}
+			}
+    	}
 
-    void inv();   //calculates the matrix's inverse
+    	return *this;
+    }
 
+    Matrix<T>& operator=(Matrix<T>&& other) noexcept // move assignment
+	{
+	    if(this != &other) {
+	    	clear();
+
+	    	elements = other.getPointer();
+	    	other.elements = 0;
+
+	    	width = other.getWidth();
+	    	height = other.getHeight();
+
+	    }
+	    return *this;
+	}
+
+	Matrix<T>& operator+=(const Matrix<T>& other) 
+	{
+    	//(to-do) multithread
+	 	if(	(other.getWidth()  == width) && 
+			(other.getHeight() == height) )
+		{
+			for(int i=0; i<width; i++)
+			{
+			for(int j=0; j<height; j++)
+			{
+				elements[i][j] += other[i][j];
+			}
+			}
+		}	
+		return *this;
+	}
+
+	Matrix<T> operator+(const Matrix<T>& other)
+	{
+		Matrix<T> result(*this);
+		result += other;
+		return result;
+	}
+
+    friend std::ostream& operator<<(std::ostream &output, const Matrix<T> &obj) 
+	{
+		for(int i=0; i<obj.getWidth(); i++)
+		{
+			output << "[";
+			for(int j=0; j<obj.getHeight(); j++)
+			{
+				output << obj[i][j];
+				if(j != obj.getHeight() -1)
+				{
+					output << ",";
+				}
+			}
+			output << "]" << std::endl;
+
+		}
+		return output;            
+	}
 };
 
 #endif
