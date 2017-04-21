@@ -1,8 +1,13 @@
 #ifndef __MATRIX__
 #define __MATRIX__
+#define N 8
 
 #include <iostream>
 #include <sstream>
+#include <pthread.h>
+
+pthread_t threads[N];
+int rc;
 
 template <class T> 
 class Matrix
@@ -104,8 +109,23 @@ public:
 	    	height = 0;
     	}
     }
+	
+	void *add_t();
 
-    void add(Matrix<T> &other);
+    void add(Matrix<T> &other)
+    {
+	    if(	(other.getWidth()  == width) && 
+		(other.getHeight() == height) )
+	    {
+		for(int i=0; i<width; i++)
+		{
+			for(int j=0; j<height; j++)
+			{
+				elements[i][j] += other[i][j]
+			}
+		}
+	    }
+    }
     void sub(Matrix<T> &other);
     void mul(Matrix<T> &other);
     void copy(Matrix<T> &other);
