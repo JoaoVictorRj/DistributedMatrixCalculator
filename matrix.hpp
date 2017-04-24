@@ -1,20 +1,16 @@
 #ifndef __MATRIX__
 #define __MATRIX__
-#define NUM_THREADS 8
 
 #include <iostream>
 #include <sstream>
-#include <pthread.h>
 #include <algorithm>
 
 template <class T> 
 class Matrix
 {
 private:
-    pthread_t threads[NUM_THREADS];
-    int rc;
-	T **elements = 0;
-	int width = 0;
+	T **elements = 0;   //pointer to matrix elements
+	int width = 0;   //
 	int height = 0;
 public:
 
@@ -25,10 +21,10 @@ public:
     	width = w;
     	height = h;
 
-    	elements = new T*[width];
-    	for(int i=0; i<width; i++)
+    	elements = new T*[height];
+    	for(int i=0; i<height; i++)
     	{
-    		elements[i] = new T[height];
+    		elements[i] = new T[width];
     	}
     }
 
@@ -37,10 +33,10 @@ public:
     	width = w;
     	height = h;
 
-    	elements = new T*[width];
-    	for(int i=0; i<width; i++)
+    	elements = new T*[height];
+    	for(int i=0; i<height; i++)
     	{
-    		elements[i] = new T[height];
+    		elements[i] = new T[width];
     	}
     	fill(value);
     }
@@ -50,11 +46,11 @@ public:
     	width = other.getWidth();
     	height = other.getHeight();
 
-		elements = new T*[width];
-		for(int i=0; i<width; i++)
+		elements = new T*[height];
+		for(int i=0; i<height; i++)
 		{
-			elements[i] = new T[height];
-			for(int j=0; j<other.height; j++)
+			elements[i] = new T[width];
+			for(int j=0; j<other.width; j++)
 			{
 				elements[i][j] = other[i][j];
 			}
@@ -79,6 +75,48 @@ public:
     T** getPointer() const
     {
     	return elements;
+    }
+
+    //valgrind
+    
+    void setWidth(int new_width) 
+    {
+        if((new_width < width) && (elements != 0))
+        {
+            for(int i=0; i<height; i++)
+            {
+                T *temp = new T[new_width];
+                for(int j=0; j<new_width; j++)
+                {
+                    temp[i] = this[i][j];
+                }
+                delete[] elements[i];
+                elements[i] = temp;
+                delete[] temp;
+            }
+        }
+        width = new_width;
+        return;
+    }
+
+    void setHeight(int new_height)
+    {
+    	if((new_height < height) && (elements != 0))
+    	{
+    		for(int i=0; i<width; i++)
+    		{
+    			for(int j=0; j<new_height; j++)
+    			{
+    				T temp = new T;
+    				temp = this[i][j];
+    				delete[] elements[i][j];
+    				elements[i][j] = temp;
+    				delete temp;
+    			}
+    		}
+    	}
+    	height = new_height;
+    	return;
     }
 
     void fill(T element)
@@ -108,25 +146,6 @@ public:
 	    	height = 0;
     	}
     }
-	
-	void *add_t(void *arg)
-    {
-        int id;
-        id = (int)arg;
-        int start = std::max(width/NUM_THREADS, height/NUM_THREADS)*id;
-        int end = start + std::max(width/NUM_THREADS, height/NUM_THREADS);
-        for (int i=start; i<end; i++);
-        pthread_exit(NULL);
-    }
-
-    void sub(Matrix<T> &other);
-    void mul(Matrix<T> &other);
-    void copy(Matrix<T> &other);
-
-    void determinant();
-    void inverse();
-    void transpose();
-
 
     T* operator[](int i) const
     {
@@ -172,18 +191,18 @@ public:
 	}
 
 	Matrix<T>& operator+=(const Matrix<T> &other) 
-	{
+    {
     	//(to-do) multithread
 	 	if(	(other.getWidth()  == width) && 
 			(other.getHeight() == height) )
 		{
-			for (int t=0; t<NUM_THREADS; t++)
-            {
-                int arg = t;
-                rc = pthread_create(&threads[t], NULL, add_t, (void *) arg);
-                if (rc)
-                    std::cout << "Erro ao criar a thread" << std::endl;
-            }
+			for(int i=0; i<width; i++)
+			{
+			for(int j=0; j<height; j++)
+			{
+				elements[i][j] += other[i][j];
+			}
+			}
 		}	
 		return *this;
 	}
