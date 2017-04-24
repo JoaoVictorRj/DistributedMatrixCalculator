@@ -1,27 +1,26 @@
 #ifndef __MATRIX__
 #define __MATRIX__
-#define N 8
+#define NUM_THREADS 8
 
 #include <iostream>
 #include <sstream>
 #include <pthread.h>
-
-pthread_t threads[N];
-int rc;
+#include <algorithm>
 
 template <class T> 
 class Matrix
 {
 private:
+    pthread_t threads[NUM_THREADS];
+    int rc;
 	T **elements = 0;
 	int width = 0;
 	int height = 0;
-
 public:
 
-    Matrix(){}
+    Matrix(){}   //constructor 1
 
-    Matrix(int w, int h)
+    Matrix(int w, int h)   //contructor 2
     {
     	width = w;
     	height = h;
@@ -33,7 +32,7 @@ public:
     	}
     }
 
-    Matrix(int w, int h, T value)
+    Matrix(int w, int h, T value)   //constructor 3
     {
     	width = w;
     	height = h;
@@ -46,7 +45,7 @@ public:
     	fill(value);
     }
 
-    Matrix(Matrix<T> &other)
+    Matrix(Matrix<T> &other)   //constructor 4
     {
     	width = other.getWidth();
     	height = other.getHeight();
@@ -110,22 +109,16 @@ public:
     	}
     }
 	
-	void *add_t();
-
-    void add(Matrix<T> &other)
+	void *add_t(void *arg)
     {
-	    if(	(other.getWidth()  == width) && 
-		(other.getHeight() == height) )
-	    {
-		for(int i=0; i<width; i++)
-		{
-			for(int j=0; j<height; j++)
-			{
-				elements[i][j] += other[i][j]
-			}
-		}
-	    }
+        int id;
+        id = (int)arg;
+        int start = std::max(width/NUM_THREADS, height/NUM_THREADS)*id;
+        int end = start + std::max(width/NUM_THREADS, height/NUM_THREADS);
+        for (int i=start; i<end; i++);
+        pthread_exit(NULL);
     }
+
     void sub(Matrix<T> &other);
     void mul(Matrix<T> &other);
     void copy(Matrix<T> &other);
@@ -178,19 +171,19 @@ public:
 	    return *this;
 	}
 
-	Matrix<T>& operator+=(const Matrix<T>& other) 
+	Matrix<T>& operator+=(const Matrix<T> &other) 
 	{
     	//(to-do) multithread
 	 	if(	(other.getWidth()  == width) && 
 			(other.getHeight() == height) )
 		{
-			for(int i=0; i<width; i++)
-			{
-			for(int j=0; j<height; j++)
-			{
-				elements[i][j] += other[i][j];
-			}
-			}
+			for (int t=0; t<NUM_THREADS; t++)
+            {
+                int arg = t;
+                rc = pthread_create(&threads[t], NULL, add_t, (void *) arg);
+                if (rc)
+                    std::cout << "Erro ao criar a thread" << std::endl;
+            }
 		}	
 		return *this;
 	}
