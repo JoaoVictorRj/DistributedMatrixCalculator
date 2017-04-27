@@ -83,19 +83,19 @@ public:
     {
         if((new_width < width) && (elements != 0))
         {
-            for(int i=0; i<height; i++)
+            for(int j=0; j<height; j++)
             {
                 T *temp = new T[new_width];
-                for(int j=0; j<new_width; j++)
+                for(int i=0; i<new_width; i++)
                 {
-                    temp[i] = this[i][j];
+                    temp[i] = elements[j][i];
+
                 }
-                delete[] elements[i];
-                elements[i] = temp;
-                delete[] temp;
+                delete[] elements[j];
+                elements[j] = temp;
             }
+        	width = new_width;
         }
-        width = new_width;
         return;
     }
 
@@ -103,19 +103,18 @@ public:
     {
     	if((new_height < height) && (elements != 0))
     	{
-    		for(int i=0; i<width; i++)
+    		T **temp = new T**[new_height];
+    		for(int i=0; i<new_height; i++)
     		{
-    			for(int j=0; j<new_height; j++)
-    			{
-    				T temp = new T;
-    				temp = this[i][j];
-    				delete[] elements[i][j];
-    				elements[i][j] = temp;
-    				delete temp;
-    			}
+    			temp[i] = elements[i];
     		}
+    		for(int i=new_height; i<height; i++)
+    		{
+    			delete[] elements[i];
+    		}
+    		elements = temp;
+    		height = new_height;
     	}
-    	height = new_height;
     	return;
     }
 
