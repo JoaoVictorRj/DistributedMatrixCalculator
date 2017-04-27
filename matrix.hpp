@@ -3,54 +3,54 @@
 
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 template <class T> 
 class Matrix
 {
 private:
-	T **elements = 0;
-	int width = 0;
+	T **elements = 0;   //pointer to matrix elements
+	int width = 0;   //
 	int height = 0;
-
 public:
 
-    Matrix(){}
+    Matrix(){}   //constructor 1
 
-    Matrix(int w, int h)
+    Matrix(int w, int h)   //contructor 2
     {
     	width = w;
     	height = h;
 
-    	elements = new T*[width];
-    	for(int i=0; i<width; i++)
+    	elements = new T*[height];
+    	for(int i=0; i<height; i++)
     	{
-    		elements[i] = new T[height];
+    		elements[i] = new T[width];
     	}
     }
 
-    Matrix(int w, int h, T value)
+    Matrix(int w, int h, T value)   //constructor 3
     {
     	width = w;
     	height = h;
 
-    	elements = new T*[width];
-    	for(int i=0; i<width; i++)
+    	elements = new T*[height];
+    	for(int i=0; i<height; i++)
     	{
-    		elements[i] = new T[height];
+    		elements[i] = new T[width];
     	}
     	fill(value);
     }
 
-    Matrix(Matrix<T> &other)
+    Matrix(Matrix<T> &other)   //constructor 4
     {
     	width = other.getWidth();
     	height = other.getHeight();
 
-		elements = new T*[width];
-		for(int i=0; i<width; i++)
+		elements = new T*[height];
+		for(int i=0; i<height; i++)
 		{
-			elements[i] = new T[height];
-			for(int j=0; j<other.height; j++)
+			elements[i] = new T[width];
+			for(int j=0; j<other.width; j++)
 			{
 				elements[i][j] = other[i][j];
 			}
@@ -75,6 +75,47 @@ public:
     T** getPointer() const
     {
     	return elements;
+    }
+
+    //valgrind
+    
+    void setWidth(int new_width) 
+    {
+        if((new_width < width) && (elements != 0))
+        {
+            for(int j=0; j<height; j++)
+            {
+                T *temp = new T[new_width];
+                for(int i=0; i<new_width; i++)
+                {
+                    temp[i] = elements[j][i];
+
+                }
+                delete[] elements[j];
+                elements[j] = temp;
+            }
+        	width = new_width;
+        }
+        return;
+    }
+
+    void setHeight(int new_height)
+    {
+    	if((new_height < height) && (elements != 0))
+    	{
+    		T **temp = new T**[new_height];
+    		for(int i=0; i<new_height; i++)
+    		{
+    			temp[i] = elements[i];
+    		}
+    		for(int i=new_height; i<height; i++)
+    		{
+    			delete[] elements[i];
+    		}
+    		elements = temp;
+    		height = new_height;
+    	}
+    	return;
     }
 
     void fill(T element)
@@ -104,16 +145,6 @@ public:
 	    	height = 0;
     	}
     }
-
-    void add(Matrix<T> &other);
-    void sub(Matrix<T> &other);
-    void mul(Matrix<T> &other);
-    void copy(Matrix<T> &other);
-
-    void determinant();
-    void inverse();
-    void transpose();
-
 
     T* operator[](int i) const
     {
@@ -158,8 +189,8 @@ public:
 	    return *this;
 	}
 
-	Matrix<T>& operator+=(const Matrix<T>& other) 
-	{
+	Matrix<T>& operator+=(const Matrix<T> &other) 
+    {
     	//(to-do) multithread
 	 	if(	(other.getWidth()  == width) && 
 			(other.getHeight() == height) )

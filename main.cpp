@@ -1,15 +1,18 @@
-#include "matrix.hpp"
+#include "ufrjmatrix.hpp"
 
 int main(){
-    Matrix<int> mat1(5,5,13);
-    Matrix<int> mat2(5,5,17);
-    Matrix<int> mat3(5,5);
 
-    std::cout << mat2[2][2] << std::endl;
+    Matrix<int> mat1(2,2);
+    mat1[0][0] = 13;
+    mat1[0][1] = 2;
+    mat1[1][0] = 4;
+    mat1[1][1] = 23;
 
-    mat3 = mat1 + mat2;
+    std::cout << mat1 << std::endl;
 
-    std::cout << mat3 << std::endl;
+    mat1.setWidth(1);
 
+    std::cout << mat1 << std::endl;
+    
     return 0;
 }
