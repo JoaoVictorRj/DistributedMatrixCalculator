@@ -1,4 +1,4 @@
-#include "ufrjmatrix.hpp"
+#include "matrix.hpp"
 
 int main(){
 
@@ -10,7 +10,8 @@ int main(){
 
     std::cout << mat1 << std::endl;
 
-    mat1.setWidth(1);
+    mat1.setWidth(4);
+    mat1.setHeight(1);
 
     std::cout << mat1 << std::endl;
     
