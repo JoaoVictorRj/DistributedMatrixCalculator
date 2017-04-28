@@ -77,19 +77,16 @@ public:
     	return elements;
     }
 
-    //valgrind
-    
     void setWidth(int new_width) 
     {
-        if((new_width < width) && (elements != 0))
+        if((new_width != width) && (elements != 0))
         {
             for(int j=0; j<height; j++)
             {
                 T *temp = new T[new_width];
-                for(int i=0; i<new_width; i++)
+                for(int i=0; i<std::min(new_width,width); i++)
                 {
                     temp[i] = elements[j][i];
-
                 }
                 delete[] elements[j];
                 elements[j] = temp;
@@ -101,17 +98,29 @@ public:
 
     void setHeight(int new_height)
     {
-    	if((new_height < height) && (elements != 0))
+    	if((new_height != height) && (elements != 0))
     	{
-    		T **temp = new T**[new_height];
-    		for(int i=0; i<new_height; i++)
+    		T **temp = new T*[new_height];
+    		for(int i=0; i<std::min(new_height,height); i++)
     		{
     			temp[i] = elements[i];
     		}
-    		for(int i=new_height; i<height; i++)
-    		{
-    			delete[] elements[i];
-    		}
+
+    		if(new_height < height)
+	    	{
+	    		for(int i=new_height; i<height; i++)
+	    		{
+	    			delete[] elements[i];
+	    		}
+	    	}
+	    	else if(new_height > height)
+	    	{
+	    		for(int i=height; i<new_height; i++)
+	    		{
+	    			temp[i] = new T[width];
+	    		}
+	    	}
+    		delete[] elements;
     		elements = temp;
     		height = new_height;
     	}
@@ -134,7 +143,7 @@ public:
     {
     	if(elements != 0)
     	{
-    		for(int i=0; i<width; i++)
+    		for(int i=0; i<height; i++)
     		{
     			delete[] elements[i];
     		}
@@ -215,13 +224,13 @@ public:
 
     friend std::ostream& operator<<(std::ostream &output, const Matrix<T> &obj) 
 	{
-		for(int i=0; i<obj.getWidth(); i++)
+		for(int i=0; i<obj.getHeight(); i++)
 		{
 			output << "[";
-			for(int j=0; j<obj.getHeight(); j++)
+			for(int j=0; j<obj.getWidth(); j++)
 			{
 				output << obj[i][j];
-				if(j != obj.getHeight() -1)
+				if(j != obj.getWidth() -1)
 				{
 					output << ",";
 				}
