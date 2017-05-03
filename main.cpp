@@ -10,7 +10,7 @@ int main(){
 
     std::cout << mat1 << std::endl;
 
-    mat1.setWidth(1);
+    mat1.setWidth(3);
 
     std::cout << mat1 << std::endl;
     
