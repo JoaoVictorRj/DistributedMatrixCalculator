@@ -1,19 +1,25 @@
 #include "matrix.hpp"
+#include <iostream>
+#include <typeinfo>
+
+using namespace std;
 
 int main(){
 
     Matrix<int> mat1(2,2);
-    mat1[0][0] = 13;
-    mat1[0][1] = 2;
-    mat1[1][0] = 4;
-    mat1[1][1] = 23;
+    Matrix<int> mat2(2,2);
 
-    std::cout << mat1 << std::endl;
+    cout << typeid(mat1).name() << endl;
 
-    mat1.setWidth(4);
-    mat1.setHeight(1);
+    void* mymatrix = (void*) mat1;
 
-    std::cout << mat1 << std::endl;
-    
+    cout << typeid(mymatrix).name() << endl;
+
+    mat2 = (Matrix<int>) mymatrix;    
+
+    //Matrix<int>* mat2 = const_cast<Matrix<int>*>( static_cast<const Matrix<int>*>(mymatrix) );
+
+    cout << typeid(mat2).name() << endl;
+
     return 0;
 }

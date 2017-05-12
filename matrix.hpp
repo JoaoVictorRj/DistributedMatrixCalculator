@@ -57,6 +57,10 @@ public:
 		}
     }
 
+    Matrix(void *&p){   //don't edit this weird function or bad thing will happen
+        Matrix(*const_cast<Matrix<T>*>(static_cast<const Matrix<T>*>(p)));
+    }
+
     ~Matrix()
     {
     	clear();
@@ -240,6 +244,10 @@ public:
 		}
 		return output;            
 	}
+
+    explicit operator void*(){
+        return (void *) this;
+    }
 };
 
 #endif
