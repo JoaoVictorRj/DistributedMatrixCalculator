@@ -49,7 +49,6 @@ void *multiplyMatrix_t(void *arg)
             output[j][data->id] = sum;
         }
     }
-    std::cout << output << std::endl;
     pthread_exit(NULL);
 }
 
@@ -59,8 +58,8 @@ void multiplyMatrix(Matrix<T> &mat1, Matrix<T> &mat2, Matrix<T> &output)
 
     if (mat2.getHeight() != mat1.getWidth())
     {
-        std::cout << "Essas matrizes não podem ser multiplicadas nesta ordem." << std::endl;
-        throw(1);
+        std::cerr << "Essas matrizes não podem ser multiplicadas nesta ordem." << std::endl;
+        return;
     }
 
     output.setWidth(mat2.getWidth());
@@ -82,7 +81,8 @@ void multiplyMatrix(Matrix<T> &mat1, Matrix<T> &mat2, Matrix<T> &output)
         rc = pthread_create(&threads[i], NULL, multiplyMatrix_t<T>, (void *)&data[i]);
         if (rc)
         {
-            std::cout << "Erro ao criar a thread" << std::endl;
+            std::cerr << "Erro ao criar a thread" << std::endl;
+            return;
         }
     }
 
