@@ -134,9 +134,9 @@ public:
     void fill(T element)
     {
     	//(to-do) multithread
-    	for(int i=0; i<width; i++)
+    	for(int i=0; i<height; i++)
 		{
-		for(int j=0; j<height; j++)
+		for(int j=0; j<width; j++)
 		{
 			elements[i][j] = element;
 		}
