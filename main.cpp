@@ -1,15 +1,19 @@
-#include "matrix.hpp"
 
-int main(){
-    Matrix<int> mat1(5,5,13);
-    Matrix<int> mat2(5,5,17);
+#include <iostream>
+#include "matrix.hpp"
+#include "matrix_op.hpp"
+
+int main()
+{
+    Matrix<int> mat1(3, 2, 3);
+    Matrix<int> mat2(1, 3, 2);
     Matrix<int> mat3(5,5);
 
-    std::cout << mat2[2][2] << std::endl;
 
-    mat3 = mat1 + mat2;
+    std::cout << mat1 << std::endl;
+    std::cout << mat2 << std::endl;
+
+    multiplyMatrix(mat1, mat2, mat3);
 
     std::cout << mat3 << std::endl;
-
-    return 0;
 }
