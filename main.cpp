@@ -35,4 +35,11 @@ int main()
     multiplyMatrix(mat1, mat2, mat3);
 
     std::cout << mat3 << std::endl;
+
+    mat3.swapRows(2,0);
+    std::cout << mat3 << std::endl;
+
+    mat3.identity();
+
+    std::cout << mat3 << std::endl;
 }

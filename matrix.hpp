@@ -57,7 +57,7 @@ public:
 		}
     }
 
-    Matrix(void *&p){   //don't edit this weird function or bad thing will happen
+    Matrix(void *&p){   //don't edit this weird function
         Matrix(*const_cast<Matrix<T>*>(static_cast<const Matrix<T>*>(p)));
     }
 
@@ -157,6 +157,48 @@ public:
 	    	width = 0;
 	    	height = 0;
     	}
+    }
+
+    bool isSquare()
+    {
+        if(height == width)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    //(to-do) can be optimized
+    void identity()
+    {
+        if(isSquare())
+        {
+            fill(0);
+            for(int i=0; i<height; i++)
+            {
+                elements[i][i] = 1;
+            }
+        }
+        else
+        {
+            std::cerr << "Only a square matrix can be identity" << std::endl;
+            throw(1);
+        }
+    }
+
+    void swapRows(int row1, int row2)
+    {
+        if((row1 < height) && (row2 < height))
+        {
+            T* temp = elements[row2];
+            elements[row2] = elements[row1];
+            elements[row1] = temp;
+        }
+        else
+        {
+            std::cerr << "Index out of range" << std::endl;
+            throw(1);
+        }
     }
 
     T* operator[](int i) const

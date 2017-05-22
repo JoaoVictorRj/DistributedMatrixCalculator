@@ -1,7 +1,8 @@
 #include <iostream>
 #include <pthread.h>
+#include <thread>
 
-#define NUM_THREADS 8
+//#define num_threads 8
 
 template <typename T>
 struct ThreadData
@@ -47,6 +48,12 @@ void *multiplyMatrix_t(void *arg)
 template <typename T>
 void multiplyMatrix(Matrix<T> &mat1, Matrix<T> &mat2, Matrix<T> &output)
 {
+    int num_threads = std::thread::hardware_concurrency();
+
+    if(num_threads == 0)
+    {
+        num_threads = 4;
+    }
 
     if(mat2.getHeight() != mat1.getWidth())
     {
@@ -60,16 +67,16 @@ void multiplyMatrix(Matrix<T> &mat1, Matrix<T> &mat2, Matrix<T> &output)
 
     int num_operations = output.getWidth() * output.getHeight();
 
-    pthread_t threads[NUM_THREADS];
-    ThreadData<T> data[NUM_THREADS];
+    pthread_t threads[num_threads];
+    ThreadData<T> data[num_threads];
 
     int rc;
-    for(int i = 0; i<NUM_THREADS; i++)
+    for(int i = 0; i<num_threads; i++)
     {
         data[i] = ThreadData<T>();
 
-        data[i].start = num_operations*i/NUM_THREADS;
-        data[i].end = num_operations*(i+1)/NUM_THREADS;
+        data[i].start = num_operations*i/num_threads;
+        data[i].end = num_operations*(i+1)/num_threads;
 
         data[i].mat1 = &mat1;
         data[i].mat2 = &mat2;
@@ -83,8 +90,55 @@ void multiplyMatrix(Matrix<T> &mat1, Matrix<T> &mat2, Matrix<T> &output)
         }
     }
 
-    for(int i=0; i<NUM_THREADS; i++)
+    for(int i=0; i<num_threads; i++)
     {
         pthread_join(threads[i], NULL);
     }
+}
+
+template<typename T>
+void decompositionLUP(Matrix<T> &mat_a, Matrix<T> &mat_lu, Matrix<T> &mat_p)
+{
+    if(mat_a.isSquare() && mat_lu && mat_p.isSquare())
+    {
+        mat_p.identity();
+        //(to-do) evaluate if this copy is necessary and if so, optimize it
+        mat_lu = mat_a;
+        for(int i=0; i<mat_a.getHeight() -1; i++)
+        {
+            int max_pivot = i;
+            for(int j = i+1; j<mat_a.getHeight(); j++)
+            {
+                if()
+            }
+        }
+    }
+    else
+    {
+        std::cerr << "In a LUP decomposition all matrixes must be square" << std::endl;
+        throw(1);
+    }
+}
+
+template <typename T>
+void inverseMatrix(Matrix<T> &mat1, Matrix<T> &output)
+{
+    int num_threads = std::thread::hardware_concurrency();
+
+    if(num_threads == 0)
+    {
+        num_threads = 4;
+    }
+
+    //(to-do) check if the determinand != 0
+    if(mat1.getWidth() != mat1.getHeight())
+    {
+        std::cerr << "Essa matriz não possui inversa." << std::endl;
+        throw(1);
+    }
+
+    Matrix<T> mat_p(mat1.getWidth(), mat1.getHeight());
+    Matrix<T> mat_lu(mat1.getWidth(), mat1.getHeight());
+
+    decompositionLUPx(mat1, mat_lu, mat_p);
 }
