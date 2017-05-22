@@ -1,23 +1,32 @@
-#include "matrix.hpp"
+#include "ufrjmatrix.hpp"
 #include <iostream>
 #include <typeinfo>
+#include <time.h>
+
+static double TimeSpecToSeconds(struct timespec* ts)
+	{
+		return (double)ts->tv_sec + (double)ts->tv_nsec / 1000000000.0;
+	}
 
 int main(){
 
-    Matrix<int> mat1(3,3,11);
-    
-    std::cout << mat1 << std::endl;
+	struct timespec start;
+	struct timespec end;
+	double timeElapsed;
 
-    void *pointer = (void*)mat1;
+    Matrix<int> mat1(10,10,24);
+    Matrix<int> mat2(10,10,12);
+    Matrix<int> mat3(1,1);
 
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    add(mat1,mat2,mat3);
+    clock_gettime(CLOCK_MONOTONIC, &end);
 
-    mat1[1][1] = 3;
-    
-    Matrix<int> mat2;
+    timeElapsed = TimeSpecToSeconds(&end) - TimeSpecToSeconds(&start);
 
-    mat2 = (Matrix<int>)mat1;
+    std::cout << "------------" << std::endl << mat3 << std::endl;
 
-    std::cout << "------------" << std::endl << mat2 << std::endl;
+    std::cout << "Time elapsed: " << timeElapsed << std::endl;
 
     return 0;
 }
