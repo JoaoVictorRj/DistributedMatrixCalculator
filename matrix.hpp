@@ -201,6 +201,17 @@ public:
         }
     }
 
+    void copyTo(Matrix<T>& other)
+    {
+        for(int i=0; i<other.getWidth(); i++)
+        {
+            for(int j=0; j<other.getHeight(); j++)
+            {
+                other[i][j] = elements[i][j];
+            }
+        }
+    }
+
     T* operator[](int i) const
     {
     	return elements[i];

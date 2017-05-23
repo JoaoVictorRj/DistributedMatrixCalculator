@@ -5,41 +5,38 @@
 
 int main()
 {
-    Matrix<int> mat1(3, 3);
-    Matrix<int> mat2(3, 3);
-    Matrix<int> mat3(5,5);
+    Matrix<float> mat1(3, 3);
 
-    mat1[0][0] = 1;
-    mat1[0][1] = 2;
-    mat1[0][2] = 3;
-    mat1[1][0] = 4;
-    mat1[1][1] = 5;
-    mat1[1][2] = 6;
-    mat1[2][0] = 7;
-    mat1[2][1] = 8;
-    mat1[2][2] = 9;
+    // mat1[0][0] = 2.0;
+    // mat1[0][1] = 7.0;
+    // mat1[0][2] = 6.0;
+    // mat1[1][0] = 9.0;
+    // mat1[1][1] = 5.0;
+    // mat1[1][2] = 1.0;
+    // mat1[2][0] = 4.0;
+    // mat1[2][1] = 3.0;
+    // mat1[2][2] = 8.0;
+    mat1[0][0] = 25.0;
+    mat1[0][1] = 5.0;
+    mat1[0][2] = 1.0;
+    mat1[1][0] = 64.0;
+    mat1[1][1] = 8.0;
+    mat1[1][2] = 1.0;
+    mat1[2][0] = 144.0;
+    mat1[2][1] = 12.0;
+    mat1[2][2] = 1.0;
 
-    mat2[0][0] = 10;
-    mat2[0][1] = 20;
-    mat2[0][2] = 30;
-    mat2[1][0] = 40;
-    mat2[1][1] = 50;
-    mat2[1][2] = 60;
-    mat2[2][0] = 70;
-    mat2[2][1] = 80;
-    mat2[2][2] = 90;
+    Matrix<float> matlu(3,3);
+    Matrix<float> matp(3,3);
 
-    std::cout << mat1 << std::endl;
-    std::cout << mat2 << std::endl;
+    std::cout << "mat1:" << std::endl << mat1 << std::endl;
 
-    multiplyMatrix(mat1, mat2, mat3);
+    decompositionLUP(mat1, matlu, matp);
 
-    std::cout << mat3 << std::endl;
+    std::cout << "mat1:" << std::endl << matlu << std::endl;
 
-    mat3.swapRows(2,0);
-    std::cout << mat3 << std::endl;
 
-    mat3.identity();
+    std::cout << "matlu:" << std::endl << matlu << std::endl;
 
-    std::cout << mat3 << std::endl;
+    std::cout << "matp:" << std::endl << matp << std::endl;
 }
