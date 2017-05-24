@@ -159,7 +159,7 @@ public:
     	}
     }
 
-    bool isSquare()
+    bool isSquare() const
     {
         if(height == width)
         {
@@ -201,17 +201,6 @@ public:
         }
     }
 
-    void copyTo(Matrix<T>& other)
-    {
-        for(int i=0; i<other.getWidth(); i++)
-        {
-            for(int j=0; j<other.getHeight(); j++)
-            {
-                other[i][j] = elements[i][j];
-            }
-        }
-    }
-
     T* operator[](int i) const
     {
     	return elements[i];
@@ -226,11 +215,12 @@ public:
 	    	width = other.getWidth();
 	    	height = other.getHeight();
 
-	    	elements = new T*[width];
-			for(int i=0; i<width; i++)
+	    	elements = new T*[height];
+			for(int i=0; i<height; i++)
 			{
-				elements[i] = new T[height];
-				for(int j=0; j<height; j++)
+				elements[i] = new T[width];
+
+				for(int j=0; j<width; j++)
 				{
 					elements[i][j] = other[i][j];
 				}
