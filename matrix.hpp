@@ -186,6 +186,72 @@ public:
         }
     }
 
+    Matrix<T> row(int row_index)
+    {
+        if(row_index < width)
+        {
+            Matrix<T> r(width, 1);
+            for(int i=0; i<width; i++)
+            {
+                r[0][i] = elements[row_index][i];
+            }
+            return r;
+        }
+        else
+        {
+            std::cerr << "Inex out of range" << std::endl;
+            throw(1);
+        }
+    }
+
+    Matrix<T> col(int col_index)
+    {
+        if(col_index < height)
+        {
+            Matrix<T> r(1, height);
+            for(int i=0; i<height; i++)
+            {
+                r[i][0] = elements[i][col_index];
+            }
+            return r;
+        }
+        else
+        {
+            std::cerr << "Inex out of range" << std::endl;
+            throw(1);
+        }
+    }
+
+    void appendCol(Matrix<T>& new_col)
+    {
+        if((new_col.getWidth() == 1) && (new_col.getHeight() == height))
+        {
+            setWidth(width+1);
+            for(int i=0; i<height; i++)
+            {
+                elements[i][width-1] = new_col[i][0];
+            }
+        }
+        else if((new_col.getWidth() == 1) && (height == 0))
+        {
+            //since height == 0, it is safe to assume that elements == 0
+            height = new_col.getHeight();
+            width = 1;
+
+            elements = new T*[height];
+            for(int i=0; i<height; i++)
+            {
+                elements[i] = new T[width];
+                elements[i][0] = new_col[i][0];
+            }
+        }
+        else
+        {
+            std::cerr << "Column cannot be added to this matrix due to wrong size" << std::endl;
+            throw(1);
+        }
+    }
+
     void swapRows(int row1, int row2)
     {
         if((row1 < height) && (row2 < height))
