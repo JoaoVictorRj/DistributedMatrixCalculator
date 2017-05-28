@@ -3,7 +3,7 @@
 #include "matrix.hpp"
 
 template <typename T>
-void *add_t(void *arg)
+void *sub_t(void *arg)
 {
     threadData<T> *data;
 	data = (threadData<T> *) arg;
@@ -17,14 +17,14 @@ void *add_t(void *arg)
 		int row = i/mat1.getWidth();
 		int col = i%mat1.getWidth();
 
-		output[row][col] = mat1[row][col] + mat2[row][col];
+		output[row][col] = mat1[row][col] - mat2[row][col];
 	}
 
     pthread_exit(NULL);
 }
 
 template <typename T>
-void add(Matrix<T> &mat1, Matrix<T> &mat2, Matrix<T> &output)
+void sub(Matrix<T> &mat1, Matrix<T> &mat2, Matrix<T> &output)
 {
 	if((mat1.getWidth() != mat2.getWidth()) || (mat1.getHeight() != mat2.getHeight()))
     {
@@ -53,7 +53,7 @@ void add(Matrix<T> &mat1, Matrix<T> &mat2, Matrix<T> &output)
 		data[t].start = num_operations*t/NUM_THREADS;
 		data[t].end = num_operations*(t+1)/NUM_THREADS;
 
-        rc = pthread_create(&thread[t], NULL, add_t<T>, (void *) &data[t]);
+        rc = pthread_create(&thread[t], NULL, sub_t<T>, (void *) &data[t]);
         if (rc)
             std::cout << "Erro ao criar a thread" << std::endl;
     }
