@@ -48,6 +48,7 @@ void *multiplyMatrix_t(void *arg)
 template <typename T>
 void multiplyMatrix(Matrix<T> &mat1, Matrix<T> &mat2, Matrix<T> &output)
 {
+    //(to-do) currently output must be diferent from mat1 and mat2
     int num_threads = std::thread::hardware_concurrency();
 
     if(num_threads == 0)
@@ -62,8 +63,7 @@ void multiplyMatrix(Matrix<T> &mat1, Matrix<T> &mat2, Matrix<T> &output)
     }
 
     //(to-do) check how costly is this resizing and if it can be paralelized
-    output.setWidth(mat2.getWidth());
-    output.setHeight(mat1.getHeight());
+    output.setSize(mat2.getWidth(), mat1.getHeight());
 
     int num_operations = output.getWidth() * output.getHeight();
 
@@ -117,6 +117,7 @@ void decompositionLUP(Matrix<T> &mat_a, Matrix<T> &mat_lu, Matrix<T> &mat_p)
                 }
             }
 
+
             if(max_pivot != i)
             {
                 mat_lu.swapRows(max_pivot,i);
@@ -150,11 +151,7 @@ void solveLinear(Matrix<T> &mat_a, Matrix<T> &mat_b, Matrix<T> &output)
     {        
         Matrix<T> mat_y(1, mat_a.getHeight());
 
-        mat_y.setHeight(mat_b.getHeight());
-        mat_y.setWidth(1);
-
-        output.setHeight(mat_b.getHeight());
-        output.setWidth(1);
+        output.setSize(1, mat_b.getHeight());
 
         Matrix<T> mat_lu(mat_a.getWidth(), mat_a.getHeight());
         Matrix<T> mat_p(mat_a.getWidth(), mat_a.getHeight());
@@ -174,12 +171,7 @@ void solveLinear(Matrix<T> &mat_a, Matrix<T> &mat_b, Matrix<T> &output)
             mat_y[i][0] = mat_pb[i][0];
             for(int j=0; j<i; j++)
             {
-                mat_y[i][0] = mat_y[i][0] - mat_lu[i][j];
-            }
-
-            for(int j=i+1; j<mat_lu.getHeight(); j++)
-            {
-                mat_lu[j][i] = mat_lu[j][i]*mat_y[i][0];
+                mat_y[i][0] = mat_y[i][0] - mat_lu[i][j]*mat_y[j][0];
             }
         }
 
@@ -192,14 +184,9 @@ void solveLinear(Matrix<T> &mat_a, Matrix<T> &mat_b, Matrix<T> &output)
 
             for(int j=last_row; j>i; j--)
             {
-                output[i][0] = output[i][0] - mat_lu[i][j];
+                output[i][0] = output[i][0] - mat_lu[i][j]*output[j][0];
             }
             output[i][0] = output[i][0]/mat_lu[i][i];
-
-            for(int j=last_row-1; j>=0; j--)
-            {
-                mat_lu[j][i] = mat_lu[j][i]*output[i][0];
-            }
         }
         //finally, after solving Ux = b, the 'output' matrix contains the values of 'x' that satisfy
         // the coeficients in 'A'
@@ -218,29 +205,18 @@ void *inverseMatrix_t(void *arg)
     data = (ThreadData<T> *) arg;
 
     Matrix<T>& mat_lu = *data->mat1;
-    Matrix<T>& mat_p = *data->mat2;
+    Matrix<T>& mat_pb = *data->mat2;
     Matrix<T>& output = *data->output;
 
-    std::cout << "finished arranging params" << std::endl;
     for(int output_col=data->start; output_col < data->end; output_col++)
     {
-        Matrix<T> mat_y(1, mat_lu.getHeight());
-
-        mat_y.setHeight(mat_lu.getHeight());
-        mat_y.setWidth(1);
-
         //then, with the substitution Ux = y, the equasion becomes Ly = Pb
         for(int i=0; i<mat_lu.getHeight(); i++)
         {
-            mat_y[i][0] = mat_p[i][0];
+            output[i][output_col] = mat_pb[i][output_col];
             for(int j=0; j<i; j++)
             {
-                mat_y[i][0] = mat_y[i][0] - mat_lu[i][j];
-            }
-
-            for(int j=i+1; j<mat_lu.getHeight(); j++)
-            {
-                mat_lu[j][i] = mat_lu[j][i]*mat_y[i][0];
+                output[i][output_col] = output[i][output_col] - mat_lu[i][j]*output[j][output_col];
             }
         }
 
@@ -249,21 +225,14 @@ void *inverseMatrix_t(void *arg)
         int last_row = mat_lu.getHeight()-1;
         for(int i=last_row; i>=0; i--)
         {
-            output[i][output_col] = mat_y[i][0];
+            output[i][output_col] = output[i][output_col];
 
             for(int j=last_row; j>i; j--)
             {
-                output[i][output_col] = output[i][output_col] - mat_lu[i][j];
+                output[i][output_col] = output[i][output_col] - mat_lu[i][j]*output[j][output_col];
             }
             output[i][output_col] = output[i][output_col]/mat_lu[i][i];
-
-            for(int j=last_row-1; j>=0; j--)
-            {
-                mat_lu[j][i] = mat_lu[j][i]*output[i][output_col];
-            }
         }
-
-        std::cout << "OUTPUT: " << std::endl << output << std::endl;
     }
 
     pthread_exit(NULL);
@@ -278,19 +247,17 @@ void inverseMatrix(Matrix<T> &mat1, Matrix<T> &output)
     {
         num_threads = 4;
     }
-    std::cout << "NUM_THREADS: " <<  num_threads << std::endl;
 
     //(to-do) check if the determinant != 0
     if(mat1.isSquare())
     {
-        output.setWidth(mat1.getWidth());
-        output.setHeight(mat1.getHeight());
+        output.setSize(mat1.getWidth(), mat1.getHeight());
 
         Matrix<T> mat_lu(mat1.getWidth(), mat1.getHeight());
         Matrix<T> mat_p(mat1.getWidth(), mat1.getHeight());
-        
+
         decompositionLUP(mat1, mat_lu, mat_p);
-        
+
         int num_operations = mat1.getWidth();
 
         pthread_t threads[num_threads];
@@ -307,9 +274,7 @@ void inverseMatrix(Matrix<T> &mat1, Matrix<T> &output)
             data[i].mat2 = &mat_p;
             data[i].output = &output;
 
-            std::cout << "Creating thread " << i << std::endl;
             int rc = pthread_create(&threads[i], NULL, inverseMatrix_t<T>, (void *)&data[i]);
-            std::cout << "Created thread " << i << std::endl;
             if(rc)
             {
                 std::cerr << "Erro ao criar a thread" << std::endl;

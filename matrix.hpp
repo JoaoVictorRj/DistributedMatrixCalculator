@@ -18,26 +18,12 @@ public:
 
     Matrix(int w, int h)   //contructor 2
     {
-    	width = w;
-    	height = h;
-
-    	elements = new T*[height];
-    	for(int i=0; i<height; i++)
-    	{
-    		elements[i] = new T[width];
-    	}
+        setSize(w, h);
     }
 
     Matrix(int w, int h, T value)   //constructor 3
     {
-    	width = w;
-    	height = h;
-
-    	elements = new T*[height];
-    	for(int i=0; i<height; i++)
-    	{
-    		elements[i] = new T[width];
-    	}
+        setSize(w, h);        
     	fill(value);
     }
 
@@ -79,6 +65,67 @@ public:
     T** getPointer() const
     {
     	return elements;
+    }
+
+    void setSize(int new_width, int new_height)
+    {
+        if((new_width <= 0) || (new_height <= 0))
+        {
+            std::cerr << "Invalid matrix size" << std::endl;
+            throw(1);
+        }
+
+        if((height == new_height) && (width == new_width))
+        {
+            return;
+        }
+        else if(height == new_height)
+        {
+            setWidth(new_width);
+        }
+        else if(width == new_width)
+        {
+            setHeight(new_height);
+        }
+        else if(elements == 0)
+        {
+            width = new_width;
+            height = new_height;
+
+            elements = new T*[height];
+            for(int i=0; i<height; i++)
+            {
+                elements[i] = new T[width];
+            }
+        }
+        else
+        {
+            T **temp = new T*[new_height];
+            for(int j=0; j<height; j++)
+            {
+                if(j < new_height)
+                {
+                    temp[j] = new T[new_width];
+
+                    for(int i=0; i<std::min(new_width,width); i++)
+                    {
+                        temp[j][i] = elements[j][i];
+                    }
+                }
+                delete[] elements[j];
+            }
+            for(int j=height; j<new_height; j++)
+            {
+                temp[j] = new T[new_width];                
+            }
+
+            delete[] elements;
+            elements = temp;
+
+            width = new_width;
+            height = new_height;
+        }
+        return;
     }
 
     void setWidth(int new_width) 
@@ -218,36 +265,6 @@ public:
         else
         {
             std::cerr << "Inex out of range" << std::endl;
-            throw(1);
-        }
-    }
-
-    void appendCol(Matrix<T>& new_col)
-    {
-        if((new_col.getWidth() == 1) && (new_col.getHeight() == height))
-        {
-            setWidth(width+1);
-            for(int i=0; i<height; i++)
-            {
-                elements[i][width-1] = new_col[i][0];
-            }
-        }
-        else if((new_col.getWidth() == 1) && (height == 0))
-        {
-            //since height == 0, it is safe to assume that elements == 0
-            height = new_col.getHeight();
-            width = 1;
-
-            elements = new T*[height];
-            for(int i=0; i<height; i++)
-            {
-                elements[i] = new T[width];
-                elements[i][0] = new_col[i][0];
-            }
-        }
-        else
-        {
-            std::cerr << "Column cannot be added to this matrix due to wrong size" << std::endl;
             throw(1);
         }
     }

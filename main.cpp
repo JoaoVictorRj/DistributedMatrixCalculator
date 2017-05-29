@@ -16,25 +16,14 @@ int main()
     mat1[2][0] = 4.0;
     mat1[2][1] = 3.0;
     mat1[2][2] = 8.0;
-    // mat1[0][0] = 25.0;
-    // mat1[0][1] = 5.0;
-    // mat1[0][2] = 1.0;
-    // mat1[1][0] = 64.0;
-    // mat1[1][1] = 8.0;
-    // mat1[1][2] = 1.0;
-    // mat1[2][0] = 144.0;
-    // mat1[2][1] = 12.0;
-    // mat1[2][2] = 1.0;
 
     Matrix<float> mat3(1, 3);
-    mat3[0][0] = 1.0;
-    mat3[1][0] = 0.0;
+    mat3[0][0] = 0.0;
+    mat3[1][0] = 1.0;
     mat3[2][0] = 0.0;
 
-    std::cout << "mat1:" << std::endl << mat1 << std::endl;
-    // std::cout << "mat2:" << std::endl << mat2 << std::endl;
-
     Matrix<float> output;
+    
     inverseMatrix(mat1, output);
 
     std::cout << "mat1:" << std::endl << mat1 << std::endl;
