@@ -3,7 +3,7 @@
 #include "matrix.hpp"
 
 template <typename T>
-void *transposed_t(void *arg)
+void *copy_t(void *arg)
 {
     threadData<T> *data;
 	data = (threadData<T> *) arg;
@@ -16,18 +16,18 @@ void *transposed_t(void *arg)
 		int row = i/mat1.getWidth();
 		int col = i%mat1.getWidth();
 
-        if (output[col][row] != mat1[row][col])
-		output[col][row] = mat1[row][col];
+        if (output[row][col] != mat1[row][col])
+		output[row][col] = mat1[row][col];
 	}
 
     pthread_exit(NULL);
 }
 
 template <typename T>
-void transposed(Matrix<T> &mat1, Matrix<T> &output)
+void copy(Matrix<T> &mat1, Matrix<T> &output)
 {
-    output.setWidth(mat1.getHeight());
-    output.setHeight(mat1.getWidth());
+    output.setWidth(mat1.getWidth());
+    output.setHeight(mat1.getHeight());
 
     int num_operations = output.getWidth() * output.getHeight();
 
@@ -46,7 +46,7 @@ void transposed(Matrix<T> &mat1, Matrix<T> &output)
 		data[t].start = num_operations*t/NUM_THREADS;
 		data[t].end = num_operations*(t+1)/NUM_THREADS;
 
-        rc = pthread_create(&thread[t], NULL, transposed_t<T>, (void *) &data[t]);
+        rc = pthread_create(&thread[t], NULL, copy_t<T>, (void *) &data[t]);
         if (rc)
             std::cout << "Erro ao criar a thread" << std::endl;
     }

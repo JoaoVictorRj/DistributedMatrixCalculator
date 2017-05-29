@@ -14,8 +14,7 @@ int main(){
 	struct timespec end;
 	double timeElapsed;
 
-    Matrix<int> mat1(1000,1000,32);
-    mat1[1][3] = 4;
+    Matrix<int> mat1(100,10,32);
     Matrix<int> mat2(10,10,12);
     Matrix<int> mat3(1,1);
 
