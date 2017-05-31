@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "matrix.hpp"
 #include "matrix_op.hpp"
@@ -28,4 +27,6 @@ int main()
 
     std::cout << "mat1:" << std::endl << mat1 << std::endl;
     std::cout << "output:" << std::endl << output << std::endl;
+
+    std::cout << "determinant:" << std::endl << mat1.determinant() << std::endl;
 }
