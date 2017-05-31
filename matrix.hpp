@@ -374,6 +374,21 @@ public:
     explicit operator void*(){
         return (void *) this;
     }
+
+    T determinant(){
+        Matrix<T> LU(width, height);
+        Matrix<T> P(width, height);
+        decompositionLUP(*const_cast<Matrix<T>*>(this), LU, P);
+        T det=1;
+        int signal=-1;
+        for (int i=0;i<width;i++){
+            det*=LU[i][i];
+            if (P[i][i]==0)
+                signal*=-1;
+        }
+        det*=signal;
+        return det;
+    }
 };
 
 #endif
