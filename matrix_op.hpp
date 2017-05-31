@@ -248,8 +248,8 @@ void inverseMatrix(Matrix<T> &mat1, Matrix<T> &output)
         num_threads = 4;
     }
 
-    //(to-do) check if the determinant != 0
-    if(mat1.isSquare())
+
+    if(mat1.isSquare() and mat1.determinant()!=0)
     {
         output.setSize(mat1.getWidth(), mat1.getHeight());
 
