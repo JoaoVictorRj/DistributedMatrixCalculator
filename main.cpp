@@ -36,7 +36,7 @@ int main(int argc, char* argv[]){
 
     timeElapsed = TimeSpecToSeconds(&end) - TimeSpecToSeconds(&start);
 
-    std::cout << "------------" << std::endl << M << std::endl;
+    std::cout << "------------" << std::endl << std::endl << M << std::endl;
 
     std::cout << "Time elapsed: " << timeElapsed << std::endl;
 
