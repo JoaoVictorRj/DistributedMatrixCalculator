@@ -8,23 +8,35 @@ static double TimeSpecToSeconds(struct timespec* ts)
 		return (double)ts->tv_sec + (double)ts->tv_nsec / 1000000000.0;
 	}
 
-int main(){
+int main(int argc, char* argv[]){
 
 	struct timespec start;
 	struct timespec end;
 	double timeElapsed;
+    int w,h,m;
+    w = atoi(argv[2]);
+    h = atoi(argv[3]);
+    m = atoi(argv[1]);
 
-    Matrix<int> mat1(100,10,32);
-    Matrix<int> mat2(10,10,12);
-    Matrix<int> mat3(1,1);
+    Matrix<int> M(h,w);
+
+    for (int i=0;i<h;i++){
+        for (int j=0;j<w;j++){
+            M[i][j]=atoi(argv[4+w*i+j]);
+        }
+    }
+
+    std::cout<<M<<std::endl;
+
+    Matrix<int> mat1(10,10,32);
 
     clock_gettime(CLOCK_MONOTONIC, &start);
-    transposed(mat1,mat3);
+    smul(M,m,M);
     clock_gettime(CLOCK_MONOTONIC, &end);
 
     timeElapsed = TimeSpecToSeconds(&end) - TimeSpecToSeconds(&start);
 
-    //std::cout << "------------" << std::endl << mat3 << std::endl;
+    std::cout << "------------" << std::endl << M << std::endl;
 
     std::cout << "Time elapsed: " << timeElapsed << std::endl;
 
