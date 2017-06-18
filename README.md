@@ -13,3 +13,6 @@ Functions available:
 - Linear system solution
 
 Offers a server/client model test in Python, for remote calls.
+
+**Petri Net modeled using PIPE2 (Platform Independent Petri net Editor 2)**
+![MatrixLibrary2.png](https://github.com/jvdavim/DistributedMatrixCalculator/raw/master/MatrixLibrary2.png)
