@@ -5,3 +5,7 @@
 #include "smul.hpp"
 #include "transposed.hpp"
 #include "copy.hpp"
+#include "inverseMatrix.hpp"
+#include "multiplyMatrix.hpp"
+#include "decompositionLUP.hpp"
+#include "solveLinear.hpp"

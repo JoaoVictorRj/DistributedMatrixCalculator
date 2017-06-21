@@ -4,8 +4,11 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+<<<<<<< HEAD
 
-#define NUM_THREADS 1
+//#define NUM_THREADS 1
+=======
+>>>>>>> grupo8
 
 template <class T> 
 class Matrix
@@ -28,6 +31,7 @@ public:
     	{
     		elements[i] = new T[width];
     	}
+        setSize(w, h);
     }
 
     Matrix(int w, int h, T value)   //constructor 3
@@ -40,6 +44,7 @@ public:
     	{
     		elements[i] = new T[width];
     	}
+        setSize(w, h);        
     	fill(value);
     }
 
@@ -59,7 +64,7 @@ public:
 		}
     }
 
-    Matrix(void *&p){   //don't edit this weird function or bad thing will happen
+    Matrix(void *&p){   //don't edit this weird function
         Matrix(*const_cast<Matrix<T>*>(static_cast<const Matrix<T>*>(p)));
     }
 
@@ -81,6 +86,67 @@ public:
     T** getPointer() const
     {
     	return elements;
+    }
+
+    void setSize(int new_width, int new_height)
+    {
+        if((new_width <= 0) || (new_height <= 0))
+        {
+            std::cerr << "Invalid matrix size" << std::endl;
+            throw(1);
+        }
+
+        if((height == new_height) && (width == new_width))
+        {
+            return;
+        }
+        else if(height == new_height)
+        {
+            setWidth(new_width);
+        }
+        else if(width == new_width)
+        {
+            setHeight(new_height);
+        }
+        else if(elements == 0)
+        {
+            width = new_width;
+            height = new_height;
+
+            elements = new T*[height];
+            for(int i=0; i<height; i++)
+            {
+                elements[i] = new T[width];
+            }
+        }
+        else
+        {
+            T **temp = new T*[new_height];
+            for(int j=0; j<height; j++)
+            {
+                if(j < new_height)
+                {
+                    temp[j] = new T[new_width];
+
+                    for(int i=0; i<std::min(new_width,width); i++)
+                    {
+                        temp[j][i] = elements[j][i];
+                    }
+                }
+                delete[] elements[j];
+            }
+            for(int j=height; j<new_height; j++)
+            {
+                temp[j] = new T[new_width];                
+            }
+
+            delete[] elements;
+            elements = temp;
+
+            width = new_width;
+            height = new_height;
+        }
+        return;
     }
 
     void setWidth(int new_width) 
@@ -161,6 +227,84 @@ public:
     	}
     }
 
+    bool isSquare() const
+    {
+        if(height == width)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    //(to-do) can be optimized
+    void identity()
+    {
+        if(isSquare())
+        {
+            fill(0);
+            for(int i=0; i<height; i++)
+            {
+                elements[i][i] = 1;
+            }
+        }
+        else
+        {
+            std::cerr << "Only a square matrix can be identity" << std::endl;
+            throw(1);
+        }
+    }
+
+    Matrix<T> row(int row_index)
+    {
+        if(row_index < width)
+        {
+            Matrix<T> r(width, 1);
+            for(int i=0; i<width; i++)
+            {
+                r[0][i] = elements[row_index][i];
+            }
+            return r;
+        }
+        else
+        {
+            std::cerr << "Inex out of range" << std::endl;
+            throw(1);
+        }
+    }
+
+    Matrix<T> col(int col_index)
+    {
+        if(col_index < height)
+        {
+            Matrix<T> r(1, height);
+            for(int i=0; i<height; i++)
+            {
+                r[i][0] = elements[i][col_index];
+            }
+            return r;
+        }
+        else
+        {
+            std::cerr << "Inex out of range" << std::endl;
+            throw(1);
+        }
+    }
+
+    void swapRows(int row1, int row2)
+    {
+        if((row1 < height) && (row2 < height))
+        {
+            T* temp = elements[row2];
+            elements[row2] = elements[row1];
+            elements[row1] = temp;
+        }
+        else
+        {
+            std::cerr << "Index out of range" << std::endl;
+            throw(1);
+        }
+    }
+
     T* operator[](int i) const
     {
     	return elements[i];
@@ -175,11 +319,12 @@ public:
 	    	width = other.getWidth();
 	    	height = other.getHeight();
 
-	    	elements = new T*[width];
-			for(int i=0; i<width; i++)
+	    	elements = new T*[height];
+			for(int i=0; i<height; i++)
 			{
-				elements[i] = new T[height];
-				for(int j=0; j<height; j++)
+				elements[i] = new T[width];
+
+				for(int j=0; j<width; j++)
 				{
 					elements[i][j] = other[i][j];
 				}
@@ -249,6 +394,21 @@ public:
 
     explicit operator void*(){
         return (void *) this;
+    }
+
+    T determinant(){
+        Matrix<T> LU(width, height);
+        Matrix<T> P(width, height);
+        decompositionLUP(*const_cast<Matrix<T>*>(this), LU, P);
+        T det=1;
+        int signal=-1;
+        for (int i=0;i<width;i++){
+            det*=LU[i][i];
+            if (P[i][i]==0)
+                signal*=-1;
+        }
+        det*=signal;
+        return det;
     }
 };
 
