@@ -1,4 +1,4 @@
-import os, subprocess, socket, signal
+import os, subprocess, socket, signal, sys
 
 HOST = ''              # Server IP address
 PORT = 5000            # Server port
@@ -28,6 +28,6 @@ while True:
     while True:
         msg = con.recv(1024)
         if not msg: break
-        con.send(subprocess.check_output("./main "+msg, shell=True))
+        con.send(subprocess.check_output("./main_g7 "+msg, shell=True))
     print 'Finalizando conexao do cliente', cliente
     con.close()
