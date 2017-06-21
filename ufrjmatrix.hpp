@@ -1,0 +1,6 @@
+#include "matrix.hpp"
+#include "threaddata.hpp"
+#include "inverseMatrix.hpp"
+#include "multiplyMatrix.hpp"
+#include "decompositionLUP.hpp"
+#include "solveLinear.hpp"
