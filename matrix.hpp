@@ -4,11 +4,8 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
-<<<<<<< HEAD
 
 //#define NUM_THREADS 1
-=======
->>>>>>> grupo8
 
 template <class T> 
 class Matrix
