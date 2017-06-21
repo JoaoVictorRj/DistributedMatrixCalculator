@@ -5,6 +5,8 @@
 #include <sstream>
 #include <algorithm>
 
+#define NUM_THREADS 1
+
 template <class T> 
 class Matrix
 {

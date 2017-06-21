@@ -1,25 +1,44 @@
-#include "matrix.hpp"
+#include "ufrjmatrix.hpp"
 #include <iostream>
 #include <typeinfo>
+#include <time.h>
 
-using namespace std;
+static double TimeSpecToSeconds(struct timespec* ts)
+	{
+		return (double)ts->tv_sec + (double)ts->tv_nsec / 1000000000.0;
+	}
 
-int main(){
+int main(int argc, char* argv[]){
 
-    Matrix<int> mat1(2,2);
-    Matrix<int> mat2(2,2);
+	struct timespec start;
+	struct timespec end;
+	double timeElapsed;
+    int w,h,m;
+    w = atoi(argv[2]);
+    h = atoi(argv[3]);
+    m = atoi(argv[1]);
 
-    cout << typeid(mat1).name() << endl;
+    Matrix<int> M(h,w);
 
-    void* mymatrix = (void*) mat1;
+    for (int i=0;i<h;i++){
+        for (int j=0;j<w;j++){
+            M[i][j]=atoi(argv[4+w*i+j]);
+        }
+    }
 
-    cout << typeid(mymatrix).name() << endl;
+    std::cout<<M<<std::endl;
 
-    mat2 = (Matrix<int>) mymatrix;    
+    Matrix<int> mat1(10,10,32);
 
-    //Matrix<int>* mat2 = const_cast<Matrix<int>*>( static_cast<const Matrix<int>*>(mymatrix) );
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    smul(M,m,M);
+    clock_gettime(CLOCK_MONOTONIC, &end);
 
-    cout << typeid(mat2).name() << endl;
+    timeElapsed = TimeSpecToSeconds(&end) - TimeSpecToSeconds(&start);
+
+    std::cout << "------------" << std::endl << std::endl << M << std::endl;
+
+    std::cout << "Time elapsed: " << timeElapsed << std::endl;
 
     return 0;
 }
