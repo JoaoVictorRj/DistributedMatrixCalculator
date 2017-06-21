@@ -1,4 +1,4 @@
-import os, subprocess, socket
+import os, subprocess, socket, signal
 
 HOST = ''              # Server IP address
 PORT = 5000            # Server port
