@@ -16,9 +16,7 @@ private:
 	int height = 0;
 public:
 
-    Matrix()   //constructor 1
-    {
-    }   
+    Matrix(){}   //constructor 1
 
     Matrix(int w, int h)   //contructor 2
     {

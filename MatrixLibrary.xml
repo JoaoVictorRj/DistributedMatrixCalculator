@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><pnml>
+<net id="Net-One" type="P/T net">
+<token id="Default" enabled="true" red="0" green="0" blue="0"/>
+<place id="Cliente_Espera">
+<graphics>
+<position x="150.0" y="180.0"/>
+</graphics>
+<name>
+<value>Cliente_Espera</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Cliente_Inicio">
+<graphics>
+<position x="150.0" y="0.0"/>
+</graphics>
+<name>
+<value>Cliente_Inicio</value>
+<graphics>
+<offset x="5.0" y="11.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Pedido_Transito">
+<graphics>
+<position x="270.0" y="90.0"/>
+</graphics>
+<name>
+<value>Pedido_Transito</value>
+<graphics>
+<offset x="59.0" y="0.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Resposta_Transito">
+<graphics>
+<position x="285.0" y="630.0"/>
+</graphics>
+<name>
+<value>Resposta_Transito</value>
+<graphics>
+<offset x="60.0" y="1.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Servidor_Inicio">
+<graphics>
+<position x="420.0" y="0.0"/>
+</graphics>
+<name>
+<value>Servidor_Inicio</value>
+<graphics>
+<offset x="-1.0" y="14.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Servidor_Prepara_Resposta">
+<graphics>
+<position x="420.0" y="540.0"/>
+</graphics>
+<name>
+<value>Servidor_Prepara_Resposta</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Servidor_Prepara_Threads">
+<graphics>
+<position x="420.0" y="180.0"/>
+</graphics>
+<name>
+<value>Servidor_Prepara_Threads</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Thread 1">
+<graphics>
+<position x="330.0" y="360.0"/>
+</graphics>
+<name>
+<value>Thread 1</value>
+<graphics>
+<offset x="-4.0" y="6.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Thread 2">
+<graphics>
+<position x="390.0" y="360.0"/>
+</graphics>
+<name>
+<value>Thread 2</value>
+<graphics>
+<offset x="32.0" y="45.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Thread 3">
+<graphics>
+<position x="450.0" y="360.0"/>
+</graphics>
+<name>
+<value>Thread 3</value>
+<graphics>
+<offset x="28.0" y="42.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Thread 4">
+<graphics>
+<position x="510.0" y="360.0"/>
+</graphics>
+<name>
+<value>Thread 4</value>
+<graphics>
+<offset x="68.0" y="5.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<transition id="Cria_Threads">
+<graphics>
+<position x="420.0" y="270.0"/>
+</graphics>
+<name>
+<value>Cria_Threads</value>
+<graphics>
+<offset x="-2.0" y="22.0"/>
+</graphics>
+</name>
+<orientation>
+<value>90</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="Encerra_Threads">
+<graphics>
+<position x="420.0" y="450.0"/>
+</graphics>
+<name>
+<value>Encerra_Threads</value>
+<graphics>
+<offset x="-5.0" y="35.0"/>
+</graphics>
+</name>
+<orientation>
+<value>90</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="Envia_Pedido">
+<graphics>
+<position x="150.0" y="90.0"/>
+</graphics>
+<name>
+<value>Envia_Pedido</value>
+<graphics>
+<offset x="-5.0" y="35.0"/>
+</graphics>
+</name>
+<orientation>
+<value>90</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="Envia_Resposta">
+<graphics>
+<position x="420.0" y="630.0"/>
+</graphics>
+<name>
+<value>Envia_Resposta</value>
+<graphics>
+<offset x="59.0" y="33.0"/>
+</graphics>
+</name>
+<orientation>
+<value>-270</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="Recebe_Pedido">
+<graphics>
+<position x="420.0" y="90.0"/>
+</graphics>
+<name>
+<value>Recebe_Pedido</value>
+<graphics>
+<offset x="114.0" y="24.0"/>
+</graphics>
+</name>
+<orientation>
+<value>90</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="Recebe_Resposta">
+<graphics>
+<position x="150.0" y="630.0"/>
+</graphics>
+<name>
+<value>Recebe_Resposta</value>
+<graphics>
+<offset x="58.0" y="35.0"/>
+</graphics>
+</name>
+<orientation>
+<value>90</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<arc id="Client_Inicio to Envia_Pedido" source="Cliente_Inicio" target="Envia_Pedido">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="161" y="26" curvePoint="false"/>
+<arcpath id="001" x="161" y="96" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Cliente_Espera to Recebe_Resposta" source="Cliente_Espera" target="Recebe_Resposta">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="161" y="206" curvePoint="false"/>
+<arcpath id="001" x="161" y="636" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Cria_Threads to Thread 1" source="Cria_Threads" target="Thread 1">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="422" y="286" curvePoint="false"/>
+<arcpath id="001" x="352" y="361" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Cria_Threads to Thread 2" source="Cria_Threads" target="Thread 2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="428" y="286" curvePoint="false"/>
+<arcpath id="001" x="406" y="357" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Cria_Threads to Thread 3" source="Cria_Threads" target="Thread 3">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="434" y="287" curvePoint="false"/>
+<arcpath id="001" x="457" y="357" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Cria_Threads to Thread 4" source="Cria_Threads" target="Thread 4">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="440" y="287" curvePoint="false"/>
+<arcpath id="001" x="511" y="361" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Encerra_Threads to Servidor_Prepara_Resposta" source="Encerra_Threads" target="Servidor_Prepara_Resposta">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="431" y="466" curvePoint="false"/>
+<arcpath id="001" x="431" y="537" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Envia_Pedido to Cliente_Espera" source="Envia_Pedido" target="Cliente_Espera">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="161" y="106" curvePoint="false"/>
+<arcpath id="001" x="161" y="177" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Envia_Pedido to Pedido_Transito" source="Envia_Pedido" target="Pedido_Transito">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="176" y="102" curvePoint="false"/>
+<arcpath id="001" x="267" y="102" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Envia_Resposta to Resposta_Transito" source="Envia_Resposta" target="Resposta_Transito">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="416" y="642" curvePoint="false"/>
+<arcpath id="001" x="311" y="642" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Envia_Resposta to Servidor_Inicio" source="Envia_Resposta" target="Servidor_Inicio">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="446" y="642" curvePoint="false"/>
+<arcpath id="001" x="598" y="643" curvePoint="false"/>
+<arcpath id="002" x="598" y="16" curvePoint="false"/>
+<arcpath id="003" x="446" y="12" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Pedido_Transito to Recebe_Pedido" source="Pedido_Transito" target="Recebe_Pedido">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="297" y="102" curvePoint="false"/>
+<arcpath id="001" x="416" y="102" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Recebe_Pedido to Servidor_Prepara_Threads" source="Recebe_Pedido" target="Servidor_Prepara_Threads">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="431" y="106" curvePoint="false"/>
+<arcpath id="001" x="431" y="177" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Recebe_Resposta to Client_Inicio" source="Recebe_Resposta" target="Cliente_Inicio">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="146" y="642" curvePoint="false"/>
+<arcpath id="001" x="28" y="643" curvePoint="false"/>
+<arcpath id="002" x="28" y="16" curvePoint="false"/>
+<arcpath id="003" x="147" y="12" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Resposta_Transito to Recebe_Resposta" source="Resposta_Transito" target="Recebe_Resposta">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="282" y="642" curvePoint="false"/>
+<arcpath id="001" x="176" y="642" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Servidor_Inicio to Recebe_Pedido" source="Servidor_Inicio" target="Recebe_Pedido">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="431" y="26" curvePoint="false"/>
+<arcpath id="001" x="431" y="96" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Servidor_Prepara_Resposta to Envia_Resposta" source="Servidor_Prepara_Resposta" target="Envia_Resposta">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="431" y="566" curvePoint="false"/>
+<arcpath id="001" x="431" y="636" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Servidor_Prepara_Threads to Cria_Threads" source="Servidor_Prepara_Threads" target="Cria_Threads">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="431" y="206" curvePoint="false"/>
+<arcpath id="001" x="431" y="276" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Thread 1 to Encerra_Threads" source="Thread 1" target="Encerra_Threads">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="352" y="382" curvePoint="false"/>
+<arcpath id="001" x="422" y="456" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Thread 2 to Encerra_Threads" source="Thread 2" target="Encerra_Threads">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="406" y="386" curvePoint="false"/>
+<arcpath id="001" x="428" y="456" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Thread 3 to Encerra_Threads" source="Thread 3" target="Encerra_Threads">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="457" y="386" curvePoint="false"/>
+<arcpath id="001" x="434" y="457" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Thread 4 to Encerra_Threads" source="Thread 4" target="Encerra_Threads">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="511" y="382" curvePoint="false"/>
+<arcpath id="001" x="440" y="457" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+</net>
+</pnml>
