@@ -207,6 +207,19 @@ public:
 		}
 		}
     }
+	
+    void filldiagonal(T element)
+    {
+    	//(to-do) multithread
+    	for(int i=0; i<height; i++)
+		{
+		for(int j=0; j<width; j++)
+		{
+			if(i==j):
+				elements[i][j] = element;
+		}
+	}
+    }
 
     void clear()
     {
