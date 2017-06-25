@@ -215,7 +215,7 @@ public:
 		{
 		for(int j=0; j<width; j++)
 		{
-			if(i==j):
+			if(i==j)
 				elements[i][j] = element;
 		}
 	}
